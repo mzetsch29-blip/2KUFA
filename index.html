@@ -81,21 +81,29 @@
 
     <div class="max-w-7xl mx-auto">
         
-        <!-- Font Catalog Switcher Console Panel -->
+        <!-- Font Catalog Switcher & State Control Console -->
         <div class="hud-panel rounded-xl p-4 mb-6 border-b-2 border-amber-500 shadow-xl">
             <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
-                    <h3 class="font-bold uppercase tracking-wider text-xs text-amber-400 font-mono">🎨 System UI Typography Studio</h3>
-                    <p class="text-xs text-slate-400 mt-0.5">Dynamically adjust the HUD display environment and interface typography assets.</p>
+                    <div class="flex items-center gap-2">
+                        <h3 class="font-bold uppercase tracking-wider text-xs text-amber-400 font-mono">🎨 System UI Typography Studio</h3>
+                        <span id="saveStatusIndicator" class="text-[10px] font-mono bg-emerald-950 text-emerald-400 border border-emerald-800 px-1.5 py-0.5 rounded">💾 Auto-Save Active</span>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-0.5">Dynamically adjust interface typography and maintain state persistence.</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-4">
                     <div>
-                        <label class="text-[10px] uppercase font-bold text-slate-400 block mb-1 font-mono">Display Engine Font</label>
+                        <label class="text-[10px] uppercase font-bold text-slate-400 block mb-1 font-mono">Display Font</label>
                         <select id="displayFontSelector" onchange="applyFontSetting('display', this.value)" class="bg-slate-900 border border-slate-700 text-xs text-slate-200 rounded px-2 py-1 font-mono focus:outline-none focus:border-indigo-500"></select>
                     </div>
                     <div>
-                        <label class="text-[10px] uppercase font-bold text-slate-400 block mb-1 font-mono">Interface Text Font</label>
+                        <label class="text-[10px] uppercase font-bold text-slate-400 block mb-1 font-mono">Interface Font</label>
                         <select id="interfaceFontSelector" onchange="applyFontSetting('primary', this.value)" class="bg-slate-900 border border-slate-700 text-xs text-slate-200 rounded px-2 py-1 font-mono focus:outline-none focus:border-indigo-500"></select>
+                    </div>
+                    <div class="self-end">
+                        <button onclick="resetSystemToDefaults()" class="bg-rose-950/80 hover:bg-rose-900 border border-rose-800 text-rose-300 text-xs font-mono font-bold px-2.5 py-1 rounded transition cursor-pointer">
+                            🔄 Reset State
+                        </button>
                     </div>
                 </div>
             </div>
@@ -114,15 +122,15 @@
             <div class="flex items-center gap-6 bg-black/40 border border-slate-800 px-4 py-2 rounded-lg font-mono text-xs">
                 <div>
                     <span class="text-slate-500 block text-[10px] uppercase font-bold">CAP LIMIT</span>
-                    <input type="number" id="macroBudget" value="150000" class="bg-transparent text-emerald-400 font-bold text-right w-20 focus:outline-none focus:border-emerald-500 border-b border-transparent">
+                    <input type="number" id="macroBudget" value="150000" oninput="saveStateToLocalStorage()" class="bg-transparent text-emerald-400 font-bold text-right w-20 focus:outline-none focus:border-emerald-500 border-b border-transparent">
                 </div>
                 <div class="border-l border-slate-800 pl-4">
                     <span class="text-slate-500 block text-[10px] uppercase font-bold">AWAY EVENTS</span>
-                    <input type="number" id="awayGamesCount" value="6" class="bg-transparent text-blue-400 font-bold text-right w-10 focus:outline-none focus:border-blue-500 border-b border-transparent">
+                    <input type="number" id="awayGamesCount" value="6" oninput="saveStateToLocalStorage()" class="bg-transparent text-blue-400 font-bold text-right w-10 focus:outline-none focus:border-blue-500 border-b border-transparent">
                 </div>
                 <div class="border-l border-slate-800 pl-4">
                     <span class="text-slate-500 block text-[10px] uppercase font-bold">HOME EVENTS</span>
-                    <input type="number" id="homeGamesCount" value="6" class="bg-transparent text-purple-400 font-bold text-right w-10 focus:outline-none focus:border-purple-500 border-b border-transparent">
+                    <input type="number" id="homeGamesCount" value="6" oninput="saveStateToLocalStorage()" class="bg-transparent text-purple-400 font-bold text-right w-10 focus:outline-none focus:border-purple-500 border-b border-transparent">
                 </div>
             </div>
         </header>
@@ -130,9 +138,7 @@
         <!-- Main Workspace Layout Split -->
         <div class="grid grid-cols-1 xl:grid-cols-4 gap-6 mb-12">
             
-            <!-- Left Side panels: Roster Management Sub-menus -->
             <div class="xl:col-span-3 space-y-6">
-                
                 <!-- Section 1: Player Tiers -->
                 <div class="space-y-3">
                     <div class="flex justify-between items-center border-l-4 border-blue-500 pl-2">
@@ -174,7 +180,6 @@
                         + Lease Infrastructure Line
                     </button>
                 </div>
-
             </div>
 
             <!-- Right Side Window: Main GM Checkout Console -->
@@ -188,13 +193,11 @@
                             <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                         </div>
                         
-                        <!-- Active Selected Roster Counter -->
                         <div class="bg-indigo-950/60 border border-indigo-800/80 p-2.5 rounded-lg mb-4 flex justify-between items-center">
                             <span class="text-xs font-bold text-indigo-300 uppercase font-mono">Selected Active Roster:</span>
                             <span id="activeRosterCountDisplay" class="gaming-title text-lg font-black text-amber-400">0 Players</span>
                         </div>
 
-                        <!-- Mini Ledgers -->
                         <div class="space-y-4">
                             <div>
                                 <div class="flex justify-between text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
@@ -214,7 +217,6 @@
                         </div>
                     </div>
 
-                    <!-- Bottom Summary Stats Module -->
                     <div class="pt-4 border-t border-slate-800 mt-4 space-y-4">
                         <div class="flex justify-between items-baseline bg-black/30 p-2 rounded border border-slate-800">
                             <span class="text-xs font-bold text-slate-400 uppercase">Combined Headcount:</span>
@@ -230,7 +232,6 @@
                             </div>
                         </div>
 
-                        <!-- Progress Bar Metrics -->
                         <div class="space-y-1">
                             <div id="ledgerRemainingText" class="font-mono text-xs font-bold text-emerald-400">$0 remaining</div>
                             <div class="w-full bg-slate-950 rounded-sm h-2 overflow-hidden border border-slate-800">
@@ -266,7 +267,6 @@
                 </div>
             </div>
 
-            <!-- LIVE UFA STATS SYNC ENGINE INPUT STRIP -->
             <div class="hud-panel p-3 rounded-lg flex flex-col sm:flex-row items-center justify-between gap-3 border border-indigo-800/60">
                 <div class="flex items-center gap-2 w-full sm:w-auto">
                     <span class="text-xs font-bold font-mono text-amber-400 uppercase tracking-wide flex items-center gap-1">🌐 UFA API Sync:</span>
@@ -278,7 +278,6 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                <!-- Roster System Deck -->
                 <div class="lg:col-span-3 space-y-4">
                     <div id="hypothetical-roster-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[850px] overflow-y-auto pr-2"></div>
                     
@@ -287,7 +286,6 @@
                     </button>
                 </div>
 
-                <!-- Roster Performance Metric & Logistics ROI Analyzer Panel -->
                 <div class="lg:col-span-1">
                     <div class="hud-panel border-t-4 border-t-amber-500 rounded-xl p-4 shadow-xl space-y-4">
                         <div class="border-b border-slate-800 pb-2">
@@ -295,9 +293,7 @@
                             <p class="text-[10px] text-slate-500">Cross-checks active athlete performance against origin city flight allocations.</p>
                         </div>
 
-                        <!-- ROI Output List Container -->
                         <div id="roiBreakdownContainer" class="space-y-2 max-h-[650px] overflow-y-auto font-mono text-xs"></div>
-                        
                         <div id="cityLegendContainer" class="pt-2 border-t border-slate-800 text-[10px] text-slate-400 space-y-1 leading-relaxed"></div>
                     </div>
                 </div>
@@ -306,7 +302,7 @@
 
     </div>
 
-    <!-- Inline Add Custom City Modal Overlay -->
+    <!-- Modal Overlay for Custom Origin Cities -->
     <div id="addCityModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="hud-panel border border-indigo-500/50 rounded-xl p-5 max-w-sm w-full space-y-4 shadow-2xl">
             <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -350,7 +346,7 @@
             ]
         };
 
-        let cityBadgePresets = {
+        const defaultCityBadgePresets = {
             vegas: { name: 'Las Vegas', symbol: '🟢', label: '🟢 Vegas (Local)', cost: 0, logistics: 'local', theme: 'vegas' },
             phx: { name: 'Phoenix', symbol: '🔵', label: '🔵 Phoenix', cost: 220, logistics: 'fly-in', theme: 'phx' },
             la: { name: 'Los Angeles', symbol: '🟪', label: '🟪 Los Angeles', cost: 280, logistics: 'fly-in', theme: 'la' },
@@ -358,10 +354,11 @@
             omaha: { name: 'Omaha / Central', symbol: '🔴', label: '🔴 Omaha / Central', cost: 450, logistics: 'fly-in', theme: 'omaha' }
         };
 
+        let cityBadgePresets = JSON.parse(JSON.stringify(defaultCityBadgePresets));
         let activeTargetPlayerIndexForModal = null;
         const defaultAvatarSVG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='1.5'><circle cx='12' cy='8' r='4'/><path d='M6 20v-2a6 6 0 0 1 12 0v2'/></svg>";
 
-        let profileRegistry = [
+        const defaultProfileRegistry = [
             { id: 'p1', category: 'athletes', title: 'Practice Squad / Alternates', description: 'Reserve slots for local training training phases.', count: 4, base: 40, travel: 0, model: 'game', color: 'vegas' },
             { id: 'p2', category: 'staff', title: 'Coaching Staff (Head/Assistant)', description: 'Strategic leadership payroll lines.', count: 2, base: 250, travel: 160, model: 'game', color: 'phx' },
             { id: 'p3', category: 'staff', title: 'Gameday Event Support Crew', description: 'Local operational support staff per home engagement.', count: 4, base: 120, travel: 0, model: 'game', color: 'vegas' },
@@ -369,7 +366,7 @@
             { id: 'p5', category: 'overhead', title: 'HUDL/Film Analysis Software', description: 'Monthly platform tier subscription matrix.', count: 1, base: 250, travel: 0, model: 'monthly', color: 'reno' }
         ];
 
-        let rosterRegistry = [
+        const defaultRosterRegistry = [
             { id: 'b0', activeInRoster: true, name: 'Cole Petsche', number: '0', line: 'O-Line', cityBadge: 'vegas', logistics: 'local', image: defaultAvatarSVG, contractBase: 75, travelFootprint: 0, gamesPlayed: 12, cmpPct: 92, pointsPlayed: 180, goals: 9, assists: 14, blocks: 2, turnovers: 6, plusMinus: 8, description: 'Final season parameters applied.' },
             { id: 'b1', activeInRoster: true, name: 'Marcus Fredrickson', number: '1', line: 'O-Line', cityBadge: 'vegas', logistics: 'local', image: defaultAvatarSVG, contractBase: 85, travelFootprint: 0, gamesPlayed: 12, cmpPct: 88, pointsPlayed: 210, goals: 28, assists: 16, blocks: 3, turnovers: 12, plusMinus: 19, description: 'Primary downfield scoring weapon.' },
             { id: 'b3', activeInRoster: true, name: 'Brycen Williams', number: '3', line: 'D-Line', cityBadge: 'vegas', logistics: 'local', image: defaultAvatarSVG, contractBase: 70, travelFootprint: 0, gamesPlayed: 11, cmpPct: 94, pointsPlayed: 165, goals: 4, assists: 6, blocks: 15, turnovers: 3, plusMinus: 12, description: 'Defensive handler containment anchor.' },
@@ -412,6 +409,46 @@
             { id: 'b100', activeInRoster: true, name: 'Matt Uran', number: '90', line: 'O-Line', cityBadge: 'vegas', logistics: 'local', image: defaultAvatarSVG, contractBase: 75, travelFootprint: 0, gamesPlayed: 9, cmpPct: 88, pointsPlayed: 105, goals: 9, assists: 11, blocks: 3, turnovers: 4, plusMinus: 7, description: 'Underneath local continuation element.' }
         ];
 
+        let profileRegistry = JSON.parse(JSON.stringify(defaultProfileRegistry));
+        let rosterRegistry = JSON.parse(JSON.stringify(defaultRosterRegistry));
+
+        // State Save Engine
+        function saveStateToLocalStorage() {
+            const state = {
+                macroBudget: document.getElementById('macroBudget').value,
+                awayGamesCount: document.getElementById('awayGamesCount').value,
+                homeGamesCount: document.getElementById('homeGamesCount').value,
+                profileRegistry: profileRegistry,
+                rosterRegistry: rosterRegistry,
+                cityBadgePresets: cityBadgePresets
+            };
+            localStorage.setItem('ufa_mygm_state_v1', JSON.stringify(state));
+        }
+
+        function loadStateFromLocalStorage() {
+            const saved = localStorage.getItem('ufa_mygm_state_v1');
+            if (!saved) return;
+
+            try {
+                const parsed = JSON.parse(saved);
+                if (parsed.macroBudget) document.getElementById('macroBudget').value = parsed.macroBudget;
+                if (parsed.awayGamesCount) document.getElementById('awayGamesCount').value = parsed.awayGamesCount;
+                if (parsed.homeGamesCount) document.getElementById('homeGamesCount').value = parsed.homeGamesCount;
+                if (parsed.profileRegistry) profileRegistry = parsed.profileRegistry;
+                if (parsed.rosterRegistry) rosterRegistry = parsed.rosterRegistry;
+                if (parsed.cityBadgePresets) cityBadgePresets = parsed.cityBadgePresets;
+            } catch (err) {
+                console.warn('Failed to parse saved state, using baseline defaults.', err);
+            }
+        }
+
+        function resetSystemToDefaults() {
+            if (confirm('Reset entire roster, custom cities, and budget settings to factory 2026 baseline defaults?')) {
+                localStorage.removeItem('ufa_mygm_state_v1');
+                location.reload();
+            }
+        }
+
         async function syncLiveUfaStatsEngine() {
             const endpoint = document.getElementById('ufaApiEndpointUrl').value;
             if (!endpoint) return;
@@ -436,6 +473,7 @@
                         }
                     });
                     renderRosterStudio();
+                    saveStateToLocalStorage();
                     alert('UFA Stats Engine Synced Successfully!');
                 }
             } catch (err) {
@@ -485,6 +523,7 @@
             rosterRegistry[idx].logistics = preset.logistics;
             rosterRegistry[idx].travelFootprint = preset.cost;
             renderRosterStudio();
+            saveStateToLocalStorage();
         }
 
         function openAddCityModal(playerIdx) {
@@ -530,6 +569,7 @@
             } else {
                 renderRosterStudio();
             }
+            saveStateToLocalStorage();
         }
 
         function renderProfiles() {
@@ -618,6 +658,7 @@
         function updateProfileField(index, field, value) {
             profileRegistry[index][field] = value;
             calculateMasterLedger();
+            saveStateToLocalStorage();
         }
 
         function addNewProfile(category) {
@@ -633,11 +674,13 @@
                 color: 'phx'
             });
             renderProfiles();
+            saveStateToLocalStorage();
         }
 
         function deleteProfile(index) {
             profileRegistry.splice(index, 1);
             renderProfiles();
+            saveStateToLocalStorage();
         }
 
         function catchLocalImageUpload(idx, targetNode) {
@@ -666,6 +709,7 @@
             }
 
             calculateMasterLedger();
+            saveStateToLocalStorage();
         }
 
         function updatePlayerCmpPct(idx, val) {
@@ -678,11 +722,13 @@
             if (inputNode && inputNode.value != numericVal) inputNode.value = numericVal;
 
             calculateMasterLedger();
+            saveStateToLocalStorage();
         }
 
         function togglePlayerActiveRoster(idx, activeState) {
             rosterRegistry[idx].activeInRoster = activeState;
             calculateMasterLedger();
+            saveStateToLocalStorage();
         }
 
         function renderRosterStudio() {
@@ -726,7 +772,6 @@
 
                 card.innerHTML = `
                     <div>
-                        <!-- Active Roster Selection Control Strip -->
                         <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-2 gap-2">
                             <div class="flex items-center gap-1.5 flex-1 min-w-0">
                                 <select onchange="handleCityBadgeSelection(${idx}, this.value)" class="bg-slate-900 border border-slate-800 text-[10px] rounded p-0.5 focus:outline-none font-bold max-w-[100px] truncate">
@@ -775,7 +820,6 @@
                             <input type="text" value="${player.description || ''}" onchange="updatePlayerField(${idx}, 'description', this.value)" placeholder="Add player logs / notes..." class="w-full bg-black/20 border border-slate-800/40 rounded px-1.5 py-0.5 text-[11px] text-slate-400 focus:outline-none focus:border-slate-700">
                         </div>
 
-                        <!-- Box Score Parameters Table -->
                         <div class="grid grid-cols-6 gap-1 bg-black/20 p-1.5 rounded border border-slate-900 mb-2 text-center">
                             <div>
                                 <span class="block text-[8px] font-bold text-amber-400">GP</span>
@@ -803,7 +847,6 @@
                             </div>
                         </div>
 
-                        <!-- Completion % (CMP%) Slider -->
                         <div class="bg-black/30 p-1.5 rounded border border-slate-900 mb-2 space-y-1">
                             <div class="flex justify-between items-center text-[10px]">
                                 <span class="font-bold text-blue-400 font-mono uppercase tracking-wider">Throwing Accuracy (CMP%)</span>
@@ -814,7 +857,6 @@
                             <input type="range" id="cmp-slider-${idx}" min="50" max="100" value="${player.cmpPct || 90}" oninput="updatePlayerCmpPct(${idx}, this.value)" class="w-full cursor-pointer h-1 bg-slate-950 rounded-lg appearance-none">
                         </div>
 
-                        <!-- Plus/Minus Differential Slider Module -->
                         <div class="bg-black/30 p-2 rounded border border-slate-900 mb-3 space-y-1">
                             <div class="flex justify-between items-center text-[10px]">
                                 <span class="font-bold text-indigo-400 font-mono uppercase tracking-wider">+/- Differential</span>
@@ -844,6 +886,7 @@
         function updatePlayerField(idx, field, value) {
             rosterRegistry[idx][field] = value;
             calculateMasterLedger();
+            saveStateToLocalStorage();
         }
 
         function addNewPlayer() {
@@ -869,11 +912,13 @@
                 description: 'Draft candidate roster insertion.'
             });
             renderRosterStudio();
+            saveStateToLocalStorage();
         }
 
         function deletePlayer(idx) {
             rosterRegistry.splice(idx, 1);
             renderRosterStudio();
+            saveStateToLocalStorage();
         }
 
         function calculateMasterLedger() {
@@ -900,7 +945,7 @@
             roiContainer.innerHTML = '';
 
             rosterRegistry.forEach(player => {
-                if (!player.activeInRoster) return; // Skip inactive roster players for cap calculation
+                if (!player.activeInRoster) return;
 
                 activeRosterCount++;
                 totalHeadcount++;
@@ -968,7 +1013,6 @@
 
             document.getElementById('activeRosterCountDisplay').textContent = `${activeRosterCount} Players`;
 
-            // Update City Legend Panel Dynamically
             const legendContainer = document.getElementById('cityLegendContainer');
             legendContainer.innerHTML = '';
             Object.keys(cityBadgePresets).forEach(k => {
@@ -1066,6 +1110,7 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             initFontSwitcher();
+            loadStateFromLocalStorage();
             document.getElementById('macroBudget').addEventListener('input', calculateMasterLedger);
             document.getElementById('awayGamesCount').addEventListener('input', calculateMasterLedger);
             document.getElementById('homeGamesCount').addEventListener('input', calculateMasterLedger);
