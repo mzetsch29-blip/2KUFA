@@ -587,7 +587,7 @@
                     const currentThemeClass = `theme-card-${profile.color || 'phx'}`;
                     card.className = `hud-panel rounded-xl p-4 shadow-lg flex flex-col justify-between ${currentThemeClass}`;
                     
-                    const countLabel = cat === 'overhead' ? 'Units / Slots:' : 'Headcount:';
+                    const countLabel = cat === 'overhead' ? 'Units:' : 'Headcount:';
                     
                     let labelHome = 'Home Cost ($ / Per Game)';
                     let labelAway = 'Travel Cost ($ / Per Game)';
@@ -608,26 +608,28 @@
 
                     card.innerHTML = `
                         <div>
-                            <!-- Operational Header Banner -->
-                            <div class="bg-slate-950/80 border border-slate-800 p-2 rounded-lg flex items-center justify-between gap-2 mb-3">
-                                <div class="flex-1 flex items-center gap-2">
-                                    <select onchange="updateProfileField(${globalIndex}, 'color', this.value); renderProfiles();" class="bg-slate-900 border border-slate-800 text-[10px] rounded cursor-pointer p-0.5 text-center font-bold focus:outline-none focus:border-indigo-500">
+                            <!-- Refactored Operational Header Layout for Full Text Visibility -->
+                            <div class="bg-slate-950/80 border border-slate-800 p-2.5 rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                                <div class="flex items-center gap-2 flex-1 min-w-0">
+                                    <select onchange="updateProfileField(${globalIndex}, 'color', this.value); renderProfiles();" class="bg-slate-900 border border-slate-800 text-[10px] rounded cursor-pointer p-1 text-center font-bold focus:outline-none focus:border-indigo-500">
                                         <option value="vegas" ${profile.color === 'vegas' ? 'selected' : ''}>🟢 Vegas</option>
                                         <option value="phx" ${profile.color === 'phx' ? 'selected' : ''}>🔵 Phoenix</option>
                                         <option value="la" ${profile.color === 'la' ? 'selected' : ''}>🟪 LA</option>
                                         <option value="reno" ${profile.color === 'reno' ? 'selected' : ''}>🟡 Reno/SLC</option>
                                         <option value="omaha" ${profile.color === 'omaha' ? 'selected' : ''}>🔴 Omaha</option>
                                     </select>
-                                    <input type="text" value="${profile.title}" onchange="updateProfileField(${globalIndex}, 'title', this.value)" class="bg-transparent font-bold text-sm text-slate-100 uppercase tracking-wider focus:outline-none focus:border-indigo-500 w-full">
+                                    <input type="text" value="${profile.title}" onchange="updateProfileField(${globalIndex}, 'title', this.value)" class="bg-transparent font-bold text-sm text-slate-100 uppercase tracking-wider focus:outline-none focus:border-indigo-500 flex-1 min-w-0">
                                 </div>
-                                <div class="flex items-center gap-2">
-                                    <select onchange="updateProfileField(${globalIndex}, 'model', this.value); renderProfiles();" class="bg-slate-900 border border-slate-800 text-[10px] font-bold text-slate-400 uppercase rounded px-1 py-0.5 focus:outline-none focus:border-indigo-500">
+                                <div class="flex items-center gap-2 flex-wrap justify-between sm:justify-end border-t border-slate-800/80 pt-1 sm:pt-0 sm:border-0">
+                                    <select onchange="updateProfileField(${globalIndex}, 'model', this.value); renderProfiles();" class="bg-slate-900 border border-slate-800 text-[10px] font-bold text-slate-400 uppercase rounded px-1.5 py-0.5 focus:outline-none focus:border-indigo-500">
                                         <option value="game" ${profile.model === 'game' ? 'selected' : ''}>Per Game</option>
                                         <option value="fixed" ${profile.model === 'fixed' ? 'selected' : ''}>Fixed/One-Time</option>
                                         <option value="monthly" ${profile.model === 'monthly' ? 'selected' : ''}>Monthly</option>
                                     </select>
-                                    <label class="text-[10px] font-bold text-slate-400 uppercase pl-1">${countLabel}</label>
-                                    <input type="number" value="${profile.count}" oninput="updateProfileField(${globalIndex}, 'count', parseInt(this.value) || 0)" class="w-12 bg-black/60 border-b border-slate-700 font-mono text-center text-xs py-0.5 text-amber-500 focus:outline-none focus:border-amber-400 font-bold">
+                                    <div class="flex items-center gap-1">
+                                        <label class="text-[10px] font-bold text-slate-400 uppercase">${countLabel}</label>
+                                        <input type="number" value="${profile.count}" oninput="updateProfileField(${globalIndex}, 'count', parseInt(this.value) || 0)" class="w-12 bg-black/60 border-b border-slate-700 font-mono text-center text-xs py-0.5 text-amber-500 focus:outline-none focus:border-amber-400 font-bold">
+                                    </div>
                                     <button onclick="deleteProfile(${globalIndex})" class="text-slate-600 hover:text-rose-500 text-xs font-bold pl-1 cursor-pointer">×</button>
                                 </div>
                             </div>
@@ -772,51 +774,51 @@
 
                 card.innerHTML = `
                     <div>
-                        <!-- Player Card Top Name Title Banner -->
-                        <div class="bg-slate-950/90 border border-slate-800 p-2 rounded-lg mb-3 flex items-center justify-between gap-2 shadow-inner">
-                            <div class="flex items-center gap-2 flex-1 min-w-0">
-                                <select onchange="handleCityBadgeSelection(${idx}, this.value)" class="bg-slate-900 border border-slate-800 text-[11px] rounded px-1 py-0.5 focus:outline-none font-bold max-w-[105px] truncate">
+                        <!-- Fully Expanded High-Contrast Name Title Banner -->
+                        <div class="bg-slate-950/90 border border-slate-800 p-2.5 rounded-lg mb-3 shadow-inner space-y-2">
+                            <!-- Title Row 1: City Selector + Jersey Number + Player Name -->
+                            <div class="flex items-center gap-2 w-full">
+                                <select onchange="handleCityBadgeSelection(${idx}, this.value)" class="bg-slate-900 border border-slate-800 text-[11px] rounded px-1.5 py-0.5 focus:outline-none font-bold shrink-0">
                                     ${cityOptionsHtml}
                                 </select>
-                                
-                                <div class="w-7 h-7 bg-black/60 border border-slate-700 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
-                                    <img src="${player.image || defaultAvatarSVG}" class="w-full h-full object-cover" alt="">
-                                </div>
 
-                                <div class="flex items-baseline gap-1 min-w-0 flex-1">
-                                    <span class="text-amber-500 font-mono font-bold text-xs">#</span>
-                                    <input type="text" value="${player.number}" onchange="updatePlayerField(${idx}, 'number', this.value)" class="bg-transparent text-xs text-amber-500 font-mono font-bold w-6 text-center focus:outline-none border-b border-transparent focus:border-amber-500">
-                                    <input type="text" value="${player.name}" onchange="updatePlayerField(${idx}, 'name', this.value)" class="bg-transparent font-black text-sm text-white uppercase tracking-wide focus:outline-none w-full border-b border-transparent focus:border-indigo-500 truncate">
+                                <div class="flex items-center gap-1.5 flex-1 min-w-0">
+                                    <span class="text-amber-500 font-mono font-bold text-xs shrink-0">#</span>
+                                    <input type="text" value="${player.number}" onchange="updatePlayerField(${idx}, 'number', this.value)" class="bg-transparent text-xs text-amber-500 font-mono font-bold w-7 text-center focus:outline-none border-b border-transparent focus:border-amber-500 shrink-0">
+                                    <input type="text" value="${player.name}" onchange="updatePlayerField(${idx}, 'name', this.value)" class="bg-transparent font-black text-sm text-white uppercase tracking-wide focus:outline-none w-full border-b border-transparent focus:border-indigo-500">
                                 </div>
                             </div>
 
-                            <div class="flex items-center gap-2 flex-shrink-0">
-                                <label class="flex items-center gap-1 cursor-pointer bg-black/50 border border-slate-800 px-2 py-1 rounded hover:border-amber-500 transition">
-                                    <input type="checkbox" ${player.activeInRoster ? 'checked' : ''} onchange="togglePlayerActiveRoster(${idx}, this.checked); renderRosterStudio();" class="accent-amber-500 cursor-pointer">
-                                    <span class="text-[9px] font-bold uppercase font-mono ${player.activeInRoster ? 'text-amber-400' : 'text-slate-500'}">ROSTER</span>
-                                </label>
-                                <button onclick="deletePlayer(${idx})" class="text-slate-600 hover:text-rose-500 font-bold text-xs cursor-pointer px-1">×</button>
-                            </div>
-                        </div>
+                            <!-- Title Row 2: Roster Toggle + Line Selector + Photo Button + Delete -->
+                            <div class="flex items-center justify-between gap-2 border-t border-slate-800/80 pt-2 text-[10px]">
+                                <div class="flex items-center gap-1.5">
+                                    <div class="w-6 h-6 bg-black/60 border border-slate-700 rounded-full flex items-center justify-center overflow-hidden shrink-0">
+                                        <img src="${player.image || defaultAvatarSVG}" class="w-full h-full object-cover" alt="">
+                                    </div>
+                                    <select onchange="updatePlayerField(${idx}, 'line', this.value)" class="bg-slate-900 border border-slate-800 font-bold text-slate-300 rounded px-1 py-0.5 focus:outline-none">
+                                        <option value="O-Line" ${player.line === 'O-Line' ? 'selected' : ''}>O-Line</option>
+                                        <option value="D-Line" ${player.line === 'D-Line' ? 'selected' : ''}>D-Line</option>
+                                        <option value="Reserve" ${player.line === 'Reserve' ? 'selected' : ''}>Reserve</option>
+                                    </select>
+                                    <select onchange="updatePlayerField(${idx}, 'logistics', this.value); renderRosterStudio();" class="bg-slate-900 border border-slate-800 font-bold text-slate-300 rounded px-1 py-0.5 focus:outline-none">
+                                        <option value="local" ${player.logistics === 'local' ? 'selected' : ''}>Local</option>
+                                        <option value="fly-in" ${player.logistics === 'fly-in' ? 'selected' : ''}>Fly-In</option>
+                                        <option value="oneday" ${player.logistics === 'oneday' ? 'selected' : ''}>1-Day</option>
+                                    </select>
+                                </div>
 
-                        <div class="flex items-center justify-between gap-2 mb-2">
-                            <div class="flex items-center gap-1.5">
-                                <select onchange="updatePlayerField(${idx}, 'line', this.value)" class="bg-slate-900 border border-slate-800 text-[10px] font-bold text-slate-300 rounded p-0.5 focus:outline-none">
-                                    <option value="O-Line" ${player.line === 'O-Line' ? 'selected' : ''}>O-Line</option>
-                                    <option value="D-Line" ${player.line === 'D-Line' ? 'selected' : ''}>D-Line</option>
-                                    <option value="Reserve" ${player.line === 'Reserve' ? 'selected' : ''}>Reserve</option>
-                                </select>
-                                <select onchange="updatePlayerField(${idx}, 'logistics', this.value); renderRosterStudio();" class="bg-slate-900 border border-slate-800 text-[10px] font-bold text-slate-300 rounded p-0.5 focus:outline-none">
-                                    <option value="local" ${player.logistics === 'local' ? 'selected' : ''}>Local</option>
-                                    <option value="fly-in" ${player.logistics === 'fly-in' ? 'selected' : ''}>Fly-In</option>
-                                    <option value="oneday" ${player.logistics === 'oneday' ? 'selected' : ''}>1-Day</option>
-                                </select>
+                                <div class="flex items-center gap-1.5 shrink-0">
+                                    <label class="bg-slate-900 border border-slate-700 hover:bg-slate-800 text-[9px] font-bold font-mono px-1.5 py-0.5 rounded cursor-pointer text-slate-300 transition">
+                                        📷 Photo
+                                        <input type="file" accept="image/*" onchange="catchLocalImageUpload(${idx}, this)" class="hidden">
+                                    </label>
+                                    <label class="flex items-center gap-1 cursor-pointer bg-black/50 border border-slate-800 px-1.5 py-0.5 rounded hover:border-amber-500 transition">
+                                        <input type="checkbox" ${player.activeInRoster ? 'checked' : ''} onchange="togglePlayerActiveRoster(${idx}, this.checked); renderRosterStudio();" class="accent-amber-500 cursor-pointer">
+                                        <span class="text-[9px] font-bold uppercase font-mono ${player.activeInRoster ? 'text-amber-400' : 'text-slate-500'}">ROSTER</span>
+                                    </label>
+                                    <button onclick="deletePlayer(${idx})" class="text-slate-600 hover:text-rose-500 font-bold text-xs cursor-pointer px-1">×</button>
+                                </div>
                             </div>
-                            
-                            <label class="bg-slate-900 border border-slate-700 hover:bg-slate-800 text-[9px] font-bold font-mono px-2 py-0.5 rounded cursor-pointer text-slate-300 transition">
-                                📷 Attach Photo
-                                <input type="file" accept="image/*" onchange="catchLocalImageUpload(${idx}, this)" class="hidden">
-                            </label>
                         </div>
 
                         <div class="mb-2">
