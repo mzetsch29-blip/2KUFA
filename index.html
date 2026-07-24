@@ -412,7 +412,6 @@
         let profileRegistry = JSON.parse(JSON.stringify(defaultProfileRegistry));
         let rosterRegistry = JSON.parse(JSON.stringify(defaultRosterRegistry));
 
-        // State Save Engine
         function saveStateToLocalStorage() {
             const state = {
                 macroBudget: document.getElementById('macroBudget').value,
@@ -609,7 +608,8 @@
 
                     card.innerHTML = `
                         <div>
-                            <div class="flex items-center justify-between gap-3 border-b border-slate-800 pb-2 mb-2">
+                            <!-- Operational Header Banner -->
+                            <div class="bg-slate-950/80 border border-slate-800 p-2 rounded-lg flex items-center justify-between gap-2 mb-3">
                                 <div class="flex-1 flex items-center gap-2">
                                     <select onchange="updateProfileField(${globalIndex}, 'color', this.value); renderProfiles();" class="bg-slate-900 border border-slate-800 text-[10px] rounded cursor-pointer p-0.5 text-center font-bold focus:outline-none focus:border-indigo-500">
                                         <option value="vegas" ${profile.color === 'vegas' ? 'selected' : ''}>🟢 Vegas</option>
@@ -772,27 +772,30 @@
 
                 card.innerHTML = `
                     <div>
-                        <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-2 gap-2">
-                            <div class="flex items-center gap-1.5 flex-1 min-w-0">
-                                <select onchange="handleCityBadgeSelection(${idx}, this.value)" class="bg-slate-900 border border-slate-800 text-[10px] rounded p-0.5 focus:outline-none font-bold max-w-[100px] truncate">
+                        <!-- Player Card Top Name Title Banner -->
+                        <div class="bg-slate-950/90 border border-slate-800 p-2 rounded-lg mb-3 flex items-center justify-between gap-2 shadow-inner">
+                            <div class="flex items-center gap-2 flex-1 min-w-0">
+                                <select onchange="handleCityBadgeSelection(${idx}, this.value)" class="bg-slate-900 border border-slate-800 text-[11px] rounded px-1 py-0.5 focus:outline-none font-bold max-w-[105px] truncate">
                                     ${cityOptionsHtml}
                                 </select>
                                 
-                                <div class="w-7 h-7 bg-black/50 border border-slate-800 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
+                                <div class="w-7 h-7 bg-black/60 border border-slate-700 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
                                     <img src="${player.image || defaultAvatarSVG}" class="w-full h-full object-cover" alt="">
                                 </div>
 
-                                <input type="text" value="${player.name}" onchange="updatePlayerField(${idx}, 'name', this.value)" class="bg-transparent font-bold text-sm text-slate-100 focus:outline-none w-28 border-b border-transparent focus:border-indigo-500">
-                                <span class="text-slate-600 text-xs">#</span>
-                                <input type="text" value="${player.number}" onchange="updatePlayerField(${idx}, 'number', this.value)" class="bg-transparent text-xs text-amber-500 font-mono w-6 text-center focus:outline-none border-b border-transparent focus:border-amber-500">
+                                <div class="flex items-baseline gap-1 min-w-0 flex-1">
+                                    <span class="text-amber-500 font-mono font-bold text-xs">#</span>
+                                    <input type="text" value="${player.number}" onchange="updatePlayerField(${idx}, 'number', this.value)" class="bg-transparent text-xs text-amber-500 font-mono font-bold w-6 text-center focus:outline-none border-b border-transparent focus:border-amber-500">
+                                    <input type="text" value="${player.name}" onchange="updatePlayerField(${idx}, 'name', this.value)" class="bg-transparent font-black text-sm text-white uppercase tracking-wide focus:outline-none w-full border-b border-transparent focus:border-indigo-500 truncate">
+                                </div>
                             </div>
 
-                            <div class="flex items-center gap-2">
-                                <label class="flex items-center gap-1 cursor-pointer bg-black/40 border border-slate-800 px-1.5 py-0.5 rounded hover:border-amber-500 transition">
+                            <div class="flex items-center gap-2 flex-shrink-0">
+                                <label class="flex items-center gap-1 cursor-pointer bg-black/50 border border-slate-800 px-2 py-1 rounded hover:border-amber-500 transition">
                                     <input type="checkbox" ${player.activeInRoster ? 'checked' : ''} onchange="togglePlayerActiveRoster(${idx}, this.checked); renderRosterStudio();" class="accent-amber-500 cursor-pointer">
                                     <span class="text-[9px] font-bold uppercase font-mono ${player.activeInRoster ? 'text-amber-400' : 'text-slate-500'}">ROSTER</span>
                                 </label>
-                                <button onclick="deletePlayer(${idx})" class="text-slate-600 hover:text-rose-500 font-bold text-xs cursor-pointer">×</button>
+                                <button onclick="deletePlayer(${idx})" class="text-slate-600 hover:text-rose-500 font-bold text-xs cursor-pointer px-1">×</button>
                             </div>
                         </div>
 
